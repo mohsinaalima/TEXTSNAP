@@ -1,34 +1,28 @@
-import React from 'react'
-import {assets} from '../assets/assets'
-import { Link } from 'react-router-dom'
+import { useState } from "react";
+import { assets } from "../assets/assets";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
-
   const [user, setUser] = useState(null);
+
   return (
-    <div>
+    <div className='flex items-center justify-between py-4'>
       <Link to='/'>
-      <img src={assets.logo} alt="" className='w-28 sm:w-32 lg:w-40'/> 
+        <img src={assets.logo} alt='' className='w-28 sm:w-32 lg:w-40' />
       </Link>
 
       <div>
-        {
-        user ? 
-        <div></div>
-        :
-        <div>
-          <p>Pricing</p>
-          <button>Login</button>
-        </div>
-        }
-        
-        
+        {user ? (
+          <div></div>
+        ) : (
+          <div className='flex items-center gap-2 sm:gap-5'>
+            <p>Pricing</p>
+            <button>Login</button>
+          </div>
+        )}
       </div>
-
-
-
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
