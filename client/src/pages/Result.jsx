@@ -1,5 +1,5 @@
 import React from "react";
-
+import { assets } from "../assets/assets";
 const Result = () => {
   return (
     <form className='flex flex-col min-h-[90vh] justify-center items-center'>
