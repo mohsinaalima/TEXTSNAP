@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+
 import { assets } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
 
 const Login = () => {
   const [state, setState] = useState("Login");
-  const {setShowLogin} = useContext(AppContext)
+  const { setShowLogin } = useContext(AppContext);
 
-  useEffect(()=> {
-    document.body.style.overflow = 'hidden';
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
 
-    return ()=>{
-      document.body.style.overflow = 'unset'
-    }
-
-  },[])
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
 
   return (
     <div className='absolute top-0 left-0 right-0 bottom-0 z-10 backdrop-blur-sm bg-black/30 flex justify-center items-center'>
@@ -94,8 +94,8 @@ const Login = () => {
           </p>
         )}
 
-        
-        <img onClick={()=>setShowLogin(false)}
+        <img
+          onClick={() => setShowLogin(false)}
           src={assets.cross_icon}
           alt=''
           className='absolute top-5 right-5 cursor-pointer'
