@@ -12,15 +12,11 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-const onSubmitHandler = async (e) =>{
-  < e. preventDefault();
-  try {
-
-  }catch (error) {
-
-  }
-
-}
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+    } catch (error) {}
+  };
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -32,7 +28,8 @@ const onSubmitHandler = async (e) =>{
 
   return (
     <div className='fixed top-0 left-0 right-0 bottom-0 z-10 backdrop-blur-sm bg-black/30 flex justify-center items-center'>
-      <motion.form onSubmit={onSubmitHandler}
+      <motion.form
+        onSubmit={onSubmitHandler}
         initial={{ opacity: 0.2, y: 50 }}
         transition={{ duration: 0.5 }}
         whileInView={{ opacity: 1, y: 0 }}
