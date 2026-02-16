@@ -3,10 +3,12 @@ import React, { useState, useContext, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const Login = () => {
   const [state, setState] = useState("Login");
-  const { setShowLogin } = useContext(AppContext);
+  const { setShowLogin, backendUrl, setToken, setUser } =
+    useContext(AppContext);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,6 +17,22 @@ const Login = () => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
+      if (state === "Login") {
+        const { data } = await axios.post(backendUrl + "/api/user/login", {
+          email,
+          password,
+        });
+
+        if (data.success) {
+          setToken(data.token);
+
+          setUser(data.user);
+          localStorage.setItem("token", data.token);
+
+          setShowLogin(false);
+        } else {
+        }
+      }
     } catch (error) {}
   };
 
@@ -47,7 +65,7 @@ const Login = () => {
           <div className='border px-6 py-2 flex items-center gap-2 rounded-full mt-5'>
             <img src={assets.user_icon} alt='' />
             <input
-              onChange={(e) => (setName = e.target.value)}
+              onChange={(e) => setName(e.target.value)}
               value={name}
               type='text'
               className='outline-none text-sm'
@@ -61,7 +79,7 @@ const Login = () => {
         <div className='border px-6 py-2 flex items-center gap-2 rounded-full mt-4'>
           <img src={assets.email_icon} alt='' />
           <input
-            onChange={(e) => (setEmail = e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             value={email}
             type='email'
             className='outline-none text-sm'
@@ -74,7 +92,7 @@ const Login = () => {
         <div className='border px-6 py-2 flex items-center gap-2 rounded-full mt-4'>
           <img src={assets.lock_icon} alt='' />
           <input
-            onChange={(e) => (setPassword = e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             value={password}
             type='password'
             className='outline-none text-sm'
