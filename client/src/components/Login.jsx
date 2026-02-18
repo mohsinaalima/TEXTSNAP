@@ -4,6 +4,7 @@ import { assets } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
 import { motion } from "framer-motion";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [state, setState] = useState("Login");
@@ -27,13 +28,34 @@ const Login = () => {
           setToken(data.token);
 
           setUser(data.user);
-          localStorage.setItem("token", data.token);
+          localStorage.getItem("token", data.token);
 
           setShowLogin(false);
         } else {
+          toast.error(data.message)
         }
+      }else{
+        const { data } = await axios.post(backendUrl + "/api/user/register", {
+          name,
+          email,
+          password,
+        });
+
+        if (data.success) {
+          setToken(data.token);
+
+          setUser(data.user);
+          localStorage.getItem("token", data.token);
+
+          setShowLogin(false);
+        } else {
+          toast.error(data.message)
+        }
+
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error(error.massage)
+    }
   };
 
   useEffect(() => {
