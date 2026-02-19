@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { motion } from "framer-motion";
+import { AppContext } from "../context/AppContext";
 
 const Result = () => {
   const [image, setImage] = useState(assets.sample_img_1);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [input, setInput] = useState("");
+
+  const { generateImage } = useContext(AppContext);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -16,11 +19,18 @@ const Result = () => {
     setLoading(true);
     setIsImageLoaded(false);
 
-    setTimeout(() => {
-      setImage(assets.sample_img_1);
-      setLoading(false);
-      setIsImageLoaded(true);
-    }, 3000);
+    try {
+      const generatedImage = await generateImage(input);
+
+      if (generatedImage) {
+        setImage(generatedImage);
+        setIsImageLoaded(true);
+      }
+    } catch (error) {
+      console.error("Error generating image:", error);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -37,11 +47,11 @@ const Result = () => {
           <img src={image} alt='' className='max-w-sm rounded' />
           <span
             className={`absolute bottom-0 left-0 h-1 bg-blue-500 ${
-              loading ? "w-full transition-all duration-[10s]" : "w-0"
+              loading ? "w-full transition-all duration-[3s]" : "w-0"
             }`}
           />
         </div>
-        <p className={!loading ? "hidden" : ""}>Loading.....</p>
+        {loading && <p>Loading.....</p>}
       </div>
 
       {!isImageLoaded && (
@@ -65,7 +75,10 @@ const Result = () => {
       {isImageLoaded && (
         <div className='flex gap-2 flex-wrap justify-center text-sm p-0.5 mt-10'>
           <p
-            onClick={() => setIsImageLoaded(false)}
+            onClick={() => {
+              setIsImageLoaded(false);
+              setInput("");
+            }}
             className='bg-transparent border border-zinc-900 text-black px-8 py-3 rounded-full cursor-pointer'
           >
             Generate Another

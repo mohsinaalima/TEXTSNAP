@@ -20,7 +20,7 @@ const Login = () => {
     e.preventDefault();
     try {
       if (state === "Login") {
-        const { data } = await axios.post(backendUrl + "/api/user/login", {
+        const { data } = await axios.post(`${backendUrl}/api/user/register`, {
           email,
           password,
         });
@@ -33,10 +33,10 @@ const Login = () => {
 
           setShowLogin(false);
         } else {
-          toast.error(data.message)
+          toast.error(data.message);
         }
-      }else{
-        const { data } = await axios.post(`${backendUrl}api/user/register`,{
+      } else {
+        const { data } = await axios.post(`${backendUrl}api/user/register`, {
           name,
           email,
           password,
@@ -50,12 +50,11 @@ const Login = () => {
 
           setShowLogin(false);
         } else {
-          toast.error(data.message)
+          toast.error(data.message);
         }
-
       }
     } catch (error) {
-      toast.error(error.massage)
+      toast.error(error.message);
     }
   };
 

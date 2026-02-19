@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import axios from 'axios'
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 export const AppContext = createContext();
 
@@ -8,61 +8,63 @@ const AppContextProvider = (props) => {
   const [user, setUser] = useState(null);
 
   const [showLogin, setShowLogin] = useState(false);
-  const [token, setToken] = useState(localStorage.getItem('token'))
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
-  const [credit, setCredit] = useState(false)
+  const [credit, setCredit] = useState(false);
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-const navigate = useNavigate()
+  const navigate = useNavigate();
 
-const loadCreditData = async () => {
-  try {
-const {data}=await axios.get(backendUrl + '/api/user/credits',{header: {token}})
+  const loadCreditData = async () => {
+    try {
+      const { data } = await axios.get(backendUrl + "/api/user/credits", {
+        header: { token },
+      });
 
-if(data.success){
-  setCredit(data.credits)
-  setUser(data.user)
-}
-  }catch (error) {
-    console.log(error)
-    toast.erroe(error.massage)
-  }
-}
-
-const generateImage = async (prompt)=>{
-  try {
-    const {data} = await axios.post(backendUrl + '/api.image/generate-image', {prompt}, {headers: {token}})
-
-    if(data.success){
-      loadCreditData()
-      return data.resultImage
-    }else{
-      toast.error(data.message)
-      loadCreditData()
-      if(data.creditBalance === 0){
-        navigate('/buy')
-
+      if (data.success) {
+        setCredit(data.credits);
+        setUser(data.user);
       }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.massage);
     }
+  };
 
-  }catch (error) {
-    toast.error(error.massage)
-  }
+  const generateImage = async (prompt) => {
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/image/generate-image",
+        { prompt },
+        { headers: { token } },
+      );
 
-}
+      if (data.success) {
+        loadCreditData();
+        return data.resultImage;
+      } else {
+        toast.error(data.message);
+        loadCreditData();
+        if (data.creditBalance === 0) {
+          navigate("/buy");
+        }
+      }
+    } catch (error) {
+      toast.error(error.massage);
+    }
+  };
 
-const logout = ()=>{
-  localStorage.removeItem('token');
-  setToken('')
-  setUser(null)
-}
-useEffect( ()=>{
-  if(token){
-    loadCreditData()
-  }
-
-},[token])
+  const logout = () => {
+    localStorage.removeItem("token");
+    setToken("");
+    setUser(null);
+  };
+  useEffect(() => {
+    if (token) {
+      loadCreditData();
+    }
+  }, [token]);
 
   const value = {
     user,
@@ -75,7 +77,8 @@ useEffect( ()=>{
     credit,
     setCredit,
     loadCreditData,
-    logout
+    logout,
+    generateImage,
   };
 
   return (
