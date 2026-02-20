@@ -13,6 +13,20 @@ const BuyCredit = () => {
   const navigate = useNavigate()
 
   const initPay = async (order)=>{
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: order.currency,
+      name: 'Credits Payment',
+      description: 'Credits Payment',
+      order_id: order.id,
+      receipt: order.receipt,
+      handler: async (response)=>{
+        console.log(response);
+      }
+    }
+    const rzp = new window.Razorpay(options)
+    rzp.open()
 
   }
 
@@ -60,7 +74,7 @@ const BuyCredit = () => {
               <span className='text-3xl font-medium'>${item.price} </span> /{" "}
               {item.credits} credits
             </p>
-            <button className='w-full bg-gray-800 text-white mt-8 text-sm rounded-md py-2.5 min-w-52'>
+            <button onClick={()=>paymentRazorpay(item.id)} className='w-full bg-gray-800 text-white mt-8 text-sm rounded-md py-2.5 min-w-52'>
               {user ? "purchase" : "Get Started"}
             </button>
           </div>
