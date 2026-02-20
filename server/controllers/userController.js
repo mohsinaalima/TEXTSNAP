@@ -137,6 +137,40 @@ const paymentRazorpay = async (req, res) => {
         message: "User not found or Plan ID missing",
       });
     }
+    let credits, plan, amount, date
+
+    switch (palnId) {
+      case "Basic":
+        plan = "Basic";
+        credits = 100;
+        amount = 10;
+        break;
+      case "Advanced":
+        plan = "Advanced";
+        credits = 500;
+        amount = 50;
+        break;
+      case "Business":
+        plan = "Business";
+        credits = 5000;
+        amount = 250;
+        break;
+
+
+        default:
+          return res.json({
+            success: false,
+            message: "Plan Not Found",
+          });
+    }
+
+    date = new Date();
+
+    const transtionData = {
+      userId, plan, credits, amount, date
+    }
+
+
   } catch (error) {
     console.log(error);
     res.json({
