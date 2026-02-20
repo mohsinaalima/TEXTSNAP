@@ -202,3 +202,5 @@ const option = {
 }
 
 };
+
+export {registerUser, loginUser, userCredits, paymentRazorpay};
