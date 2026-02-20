@@ -15,7 +15,8 @@ export const generateImage = async (req, res) => {
       });
     }
 
-    if (user.creditBalance === 0 || userModel.creditBalance < 0) {
+   
+    if (user.creditBalance <= 0) {
       return res.json({
         success: false,
         message: "No Credits Balance",
@@ -25,14 +26,15 @@ export const generateImage = async (req, res) => {
 
     const formData = new FormData();
     formData.append("prompt", prompt);
+
     const { data } = await axios.post(
       "https://clipdrop-api.co/text-to-image/v1",
       formData,
       {
         headers: {
+          ...formData.getHeaders(),
           "x-api-key": process.env.CLIPDROP_API,
         },
-
         responseType: "arraybuffer",
       },
     );
@@ -40,7 +42,8 @@ export const generateImage = async (req, res) => {
     const base64Image = Buffer.from(data, "binary").toString("base64");
     const resultImage = `data:image/png;base64,${base64Image}`;
 
-    await userModel.findByIdAndUpdate(user._Id, {
+    
+    await userModel.findByIdAndUpdate(user._id, {
       creditBalance: user.creditBalance - 1,
     });
 
@@ -51,7 +54,7 @@ export const generateImage = async (req, res) => {
       resultImage,
     });
   } catch (error) {
-    console.log(error.massage);
+    console.log(error.message); // fixed typo
     res.json({ success: false, message: error.message });
   }
 };
