@@ -6,18 +6,15 @@ import { useNavigate } from "react-router-dom";
 
 const Header = () => {
 
-  // ✅ Hooks MUST be here
+  
   const { user, setShowLogin } = useContext(AppContext);
   const navigate = useNavigate();
 
-  // ✅ Normal function (NO hooks inside)
+  
   const onClickHandler = () => {
-    if (user) {
-      navigate("/result");
-    } else {
-      setShowLogin(true);
-    }
-  };
+  const navigate = useNavigate(); 
+  navigate("/login");
+};
 
   return (
     <motion.div className="text-center my-20">
